@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using HiringTask.Models.Data;
+
 namespace HiringTask
 {
     public class Program
@@ -8,10 +12,12 @@ namespace HiringTask
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<TaskContext>(options =>
+                           options.UseSqlServer(builder.Configuration.GetConnectionString("TaskCon1")));
 
             var app = builder.Build();
 
