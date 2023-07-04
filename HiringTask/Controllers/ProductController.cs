@@ -114,7 +114,20 @@ namespace HiringTask.Controllers
 
             return Ok(products);
         }
+        //search by name for product
+        [HttpGet("search/{name}")]
+        public IActionResult SearchProductsByName(string name)
+        {
+            string lowercaseName = name.ToLower();
+            var products = _context.Products.Where(x => x.EnglishName.ToLower().Contains(lowercaseName) || x.ArabicName.ToLower().Contains(lowercaseName)).ToList();
 
+            if (products.Count == 0)
+            {
+                return NotFound("No Products Found :(");
+            }
+
+            return Ok(products);
+        }
 
 
 [HttpGet("search")]
