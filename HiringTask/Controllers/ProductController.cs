@@ -37,6 +37,7 @@ namespace HiringTask.Controllers
                 Description = productCategoryDTO.Description,
                 Manufacturer = productCategoryDTO.Manufacturer,
                 State = productCategoryDTO.State,
+                UserId = productCategoryDTO.UserId,
                 CategoryId = productCategoryDTO.CategoryId
             };
 
@@ -69,6 +70,7 @@ namespace HiringTask.Controllers
             product.Description = productCategoryDTO.Description;
             product.Manufacturer = productCategoryDTO.Manufacturer;
             product.State = productCategoryDTO.State;
+            product.UserId = productCategoryDTO.UserId;
             product.CategoryId = productCategoryDTO.CategoryId;
 
             _context.SaveChanges();
@@ -115,7 +117,6 @@ namespace HiringTask.Controllers
             
             );
         }
-
         var Products = query.ToList();
 
         if (Products.Count == 0)

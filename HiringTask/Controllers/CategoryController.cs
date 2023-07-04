@@ -36,7 +36,9 @@ namespace HiringTask.Controllers
                 StartDate = category.StartDate,
                 EndDate = category.EndDate,
                 State = category.State,
-                Products = category.Products.Select(product => product.ArabicName).ToList()
+                UserId = category.UserId,
+                Products = category.Products.Select(product => product.ArabicName).ToList(),
+
 
        
             }).ToList();
@@ -85,7 +87,9 @@ namespace HiringTask.Controllers
                 EnglishName = categoryDTO.EnglishName,
                 StartDate = categoryDTO.StartDate,
                 EndDate = categoryDTO.EndDate,
-                State = categoryDTO.State
+                State = categoryDTO.State,
+                UserId = categoryDTO.UserId
+               
             };
 
             _context.Categories.Add(category);

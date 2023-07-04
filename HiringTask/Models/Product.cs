@@ -10,7 +10,8 @@ namespace HiringTask.Models
         public string? ArabicName { get; set; }
         [StringLength(50)]
         public string? EnglishName { get; set; }
-        public int CreationUserId { get; set; }
+        public string? UserId { get; set; }
+        public User? User { get; set; }
         public DateTime CreationDate { get; set; }
         public int? UpdateUserId { get; set; }
        

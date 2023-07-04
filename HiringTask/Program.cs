@@ -1,6 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using HiringTask.Models.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using HiringTask.Helpers;
+using Microsoft.AspNetCore.Identity;
+using HiringTask.Models;
 
 namespace HiringTask
 {
@@ -18,7 +23,9 @@ namespace HiringTask
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<TaskContext>(options =>
                            options.UseSqlServer(builder.Configuration.GetConnectionString("TaskCon1")));
-
+            builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JWT"));
+            builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<TaskContext>();
+           
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
