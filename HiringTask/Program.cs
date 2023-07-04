@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using HiringTask.Helpers;
 using Microsoft.AspNetCore.Identity;
 using HiringTask.Models;
+using HiringTask.Services;
 
 namespace HiringTask
 {
@@ -23,8 +24,40 @@ namespace HiringTask
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<TaskContext>(options =>
                            options.UseSqlServer(builder.Configuration.GetConnectionString("TaskCon1")));
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+
+            }).AddJwtBearer(
+                o=>
+                {
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidIssuer = builder.Configuration["JWT:Issuer"],
+                        ValidAudience = builder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                    };
+                }
+                
+                
+                
+         
+                );
+
+           
+           
+           
             builder.Services.Configure<Jwt>(builder.Configuration.GetSection("JWT"));
             builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<TaskContext>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
            
             var app = builder.Build();
 
@@ -36,6 +69,7 @@ namespace HiringTask
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
