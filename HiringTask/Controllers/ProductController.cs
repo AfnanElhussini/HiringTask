@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using HiringTask.Models;
 using HiringTask.Models.Data;
 using HiringTask.DTO;
-
+using System.Linq;
 namespace HiringTask.Controllers
 {
     [Route("api/[controller]")]
@@ -94,23 +94,44 @@ namespace HiringTask.Controllers
             return Ok("Product Deleted Successfully :)");
         }
 
-        
+     
+        [HttpGet("category/{id}")]
+        public IActionResult GetAllProductsByCategoryId(int id)
+        {
+            var category = _context.Categories.Include(x => x.Products).FirstOrDefault(x => x.Id == id);
+
+            if (category == null)
+            {
+                return NotFound("Category Not Found :(");
+            }
+
+            var products = category.Products;
+
+            if (products.Count == 0)
+            {
+                return NotFound("No Products Found :(");
+            }
+
+            return Ok(products);
+        }
+
 
 
 [HttpGet("search")]
-    public IActionResult SearchProducts(int categoryId = 0, string EnglishName = null , string ArabicName=null)
+    public IActionResult SearchProductsByCategoryIdAndName(int categoryId=0, string EnglishName = null, string ArabicName =null)
     {
-        IQueryable<Product> query = _context.Products;
+        var query = _context.Products.ToList();
 
         if (categoryId != 0)
         {
-            query = query.Where(p => p.CategoryId == categoryId);
+                query = query.Where(p => p.CategoryId == categoryId).ToList();
+            //query = query.Include(c=> c.Category).Where(p => p.CategoryId == categoryId).ToList();
         }
 
         if (!string.IsNullOrEmpty(EnglishName) && !string.IsNullOrEmpty(ArabicName))
         {
             string lowercaseName = EnglishName.ToLower();
-            query = query.Where(p =>
+           var result = query.Where(p =>
                 p.EnglishName.ToLower().Contains(lowercaseName) &&
                 p.ArabicName.ToLower().Contains(lowercaseName)
 
