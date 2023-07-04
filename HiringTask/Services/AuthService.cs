@@ -14,14 +14,13 @@ namespace HiringTask.Services
     public class AuthService : IAuthService
     {
             private readonly UserManager<User> _userManager;
-            private readonly RoleManager<IdentityRole> _roleManager;
+
             private readonly SignInManager<User> _signeManager;
             private readonly Jwt _jwt;
 
-            public AuthService(UserManager<User> userManager, SignInManager<User> SigneManager, RoleManager<IdentityRole> roleManager, IOptions<Jwt> jwt)
+            public AuthService(UserManager<User> userManager, SignInManager<User> SigneManager, IOptions<Jwt> jwt)
             {
                 _userManager = userManager;
-                _roleManager = roleManager;
                 _signeManager = SigneManager;
                 _jwt = jwt.Value;
             }
